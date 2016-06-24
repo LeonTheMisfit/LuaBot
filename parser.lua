@@ -1,39 +1,52 @@
 local parser = {}
 
-local function parse_params(param_string)
-  local indx = param_string:find(":")
-  local params = {}
-  if indx == nil then
-    params = util.split(param_string, " ")
-  elseif indx == 1 then
-    params[1] = param_string:sub(2)
-  else
-    local parts = util.split(param_string, ":")
-    params = util.split(parts[1], " ")
-    params[#params+1] = parts[2]
-  end
-  return params
-end
-
 function parser.parse_message(msg)
-  local message = {
-    prefix = "",
-    command = "",
-    params = ""
-  }
+  local chars = util.explode(msg)
+  local parts = { builder:new(), builder:new(), {} }
+  local part_index = 2
+  local param_index = 0
+  local final_param = false
 
-  local fspace = 0
-  if msg:sub(1, 1) == ":" then
-    fspace = msg:find(" ")
-    message.prefix = msg:sub(1, fspace - 1)
+  for i, char in ipairs(chars) do
+    if char == ":" then
+      if i ~= 1 and part_index == 3 then
+        final_param = true
+      elseif i == 1 then
+        part_index = 1
+      end
+    elseif char == " " then
+      if part_index < 3 then
+        part_index = part_index + 1
+      else
+        if not final_param then
+          param_index = param_index + 1
+          parts[3][param_index] = builder:new()
+        else
+          parts[3][param_index]:append(" ")
+        end
+      end
+    else
+      if part_index < 3 then
+        parts[part_index]:append(char)
+      else
+        if param_index == 0 then
+          parts[3][1] = builder:new()
+          param_index = 1
+        end
+        parts[3][param_index]:append(char)
+      end
+    end
   end
 
-  local sspace = msg:find(" ", fspace + 1)
-  message.command = msg:sub(fspace + 1, sspace - 1)
+  for i, param in ipairs(parts[3]) do
+    parts[3][i] = param.string
+  end
 
-  message.params = parse_params(msg:sub(sspace + 1))
-
-  return message
+  return {
+    prefix = parts[1].string,
+    command = parts[2].string,
+    params = parts[3]
+  }
 end
 
 return parser
