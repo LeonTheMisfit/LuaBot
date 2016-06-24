@@ -1,5 +1,6 @@
 #!/usr/bin/lua
 
+builder = require("builder")
 commands = require("commands")
 config = require("config")
 dispatcher = require("dispatcher")
