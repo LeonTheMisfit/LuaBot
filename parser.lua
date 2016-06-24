@@ -7,34 +7,50 @@ function parser.parse_message(msg)
   local param_index = 0
   local final_param = false
 
+  function handle_colon(i)
+    if i ~= 1 and part_index == 3 then
+      if not final_param then
+        final_param = true
+      else
+        parts[3][param_index]:append(":")
+      end
+    elseif i == 1 then
+      part_index = 1
+    end
+  end
+
+  function handle_space(i)
+    if part_index < 3 then
+      part_index = part_index + 1
+    else
+      if not final_param then
+        param_index = param_index + 1
+        parts[3][param_index] = builder:new()
+      else
+        parts[3][param_index]:append(" ")
+      end
+    end
+  end
+
+  function handle_char(i, char)
+    if part_index < 3 then
+      parts[part_index]:append(char)
+    else
+      if param_index == 0 then
+        parts[3][1] = builder:new()
+        param_index = 1
+      end
+      parts[3][param_index]:append(char)
+    end
+  end
+
   for i, char in ipairs(chars) do
     if char == ":" then
-      if i ~= 1 and part_index == 3 then
-        final_param = true
-      elseif i == 1 then
-        part_index = 1
-      end
+      handle_colon(i)
     elseif char == " " then
-      if part_index < 3 then
-        part_index = part_index + 1
-      else
-        if not final_param then
-          param_index = param_index + 1
-          parts[3][param_index] = builder:new()
-        else
-          parts[3][param_index]:append(" ")
-        end
-      end
+      handle_space(i)
     else
-      if part_index < 3 then
-        parts[part_index]:append(char)
-      else
-        if param_index == 0 then
-          parts[3][1] = builder:new()
-          param_index = 1
-        end
-        parts[3][param_index]:append(char)
-      end
+      handle_char(i, char)
     end
   end
 
