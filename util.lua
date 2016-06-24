@@ -28,4 +28,12 @@ function util.sleep(n)
   end
 end
 
+function util.explode(str)
+  local chars = {}
+  for i = 1, #str do
+    chars[i] = str:sub(i,i)
+  end
+  return chars
+end
+
 return util
