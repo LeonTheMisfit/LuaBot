@@ -6,11 +6,13 @@ config = require("config")
 dispatcher = require("dispatcher")
 factory = require("factory")
 handler = require("handler")
+log = require("log")
 parser = require("parser")
 plugin = require("plugin")
 queue = require("queue")
 socket = require("socket")
 util = require("util")
+uuid = require("uuid")
 
 local lfs = require("lfs")
 local socket = require("socket")
@@ -47,10 +49,16 @@ local function loop()
     dispatcher.send()
   end
   client:close()
+  log.close_db()
 end
 
-load_flags()
-plugin.load()
+local function init()
+  load_flags()
+  plugin.load()
+  log.load_db()
+end
+
+init()
 connect()
 auth()
 loop()

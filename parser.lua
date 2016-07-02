@@ -61,7 +61,8 @@ function parser.parse_message(msg)
   return {
     prefix = parts[1].string,
     command = parts[2].string,
-    params = parts[3]
+    params = parts[3],
+    uuid = uuid.generate()
   }
 end
 

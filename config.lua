@@ -5,5 +5,7 @@ return {
   send_limit = 4,
   nick = "LuaBotPlusPlus",
   password = "password",
-  user = "A new improved LuaBot is on the way"
+  user = "A new improved LuaBot is on the way",
+  idlen = 16,
+  db_file = "db/main.db",
 }

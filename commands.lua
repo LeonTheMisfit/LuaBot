@@ -19,6 +19,7 @@ function commands.ERROR(msg)
 end
 
 function commands.PRIVMSG(msg)
+  log.chat_message(msg)
   local cmd = util.split(msg.params[2], " ")[1]
   if plugin.check(cmd) then
     plugin.run(cmd, msg)
