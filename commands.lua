@@ -2,6 +2,7 @@ local commands = {}
 
 function commands.PING(msg)
   client:send(factory.pong(msg.params[1]))
+  log.system(log.events.INFO, "Responded to ping.")
 end
 
 local join = false
@@ -11,11 +12,13 @@ commands["004"] = function(msg)
       client:send(factory.join(chan))
     end
     join = true
+    log.system(log.events.INFO, "Channels joined.")
   end
 end
 
 function commands.ERROR(msg)
   run = false
+  log.system(log.events.ERR, "Server sent an error response.")
 end
 
 function commands.PRIVMSG(msg)

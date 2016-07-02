@@ -4,6 +4,7 @@ local plugins = {}
 local plugin_lut = {}
 
 function plugin.load()
+  log.system(log.events.INFO, "Loading plugins.")
   plugins = {}
   plugin_lut = {}
   for file in lfs.dir("plugins/") do

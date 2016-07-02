@@ -23,6 +23,7 @@ client = socket.tcp()
 run = true
 
 local function load_flags()
+  log.system(log.events.INFO, "Loading flags.")
   for _, flag in ipairs(arg) do
     local split = util.split(flag, "=")
     config[split[1]] = split[2]
@@ -30,11 +31,13 @@ local function load_flags()
 end
 
 local function connect()
+  log.system(log.events.INFO, "Connecting to host.")
   client:settimeout(0)
   client:connect(config.host, config.port)
 end
 
 local function auth()
+  log.system(log.events.INFO, "Authenticating with server.")
   util.sleep(1)
   client:send(factory.pass(config.password))
   client:send(factory.nick(config.nick))
@@ -42,20 +45,23 @@ local function auth()
 end
 
 local function loop()
+  log.system(log.events.INFO, "Starting main loop.")
   while run do
     dispatcher.receive()
     handler.run()
     dispatcher.run()
     dispatcher.send()
   end
+  log.system(log.events.INFO, "Bot stopping.")
   client:close()
   log.close_db()
 end
 
 local function init()
+  log.load_db()
   load_flags()
   plugin.load()
-  log.load_db()
+  log.system(log.events.INFO, "Bot initialized.")
 end
 
 init()
