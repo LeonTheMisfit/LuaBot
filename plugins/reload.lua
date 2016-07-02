@@ -1,6 +1,6 @@
-local plugin = {}
+local _plugin = {}
 
-function plugin.get_commands()
+function _plugin.get_commands()
   return { "--reload" }
 end
 
@@ -14,4 +14,4 @@ function plugin.handle_command(cmd, msg)
   end
 end
 
-return plugin
+return _plugin
