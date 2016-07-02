@@ -4,7 +4,7 @@ function _plugin.get_commands()
   return { "--reload" }
 end
 
-function plugin.handle_command(cmd, msg)
+function _plugin.handle_command(cmd, msg)
   if util.has(config.chans, msg.params[1]) then
     plugin.load()
     local message = factory.action("reloads plugins.")
