@@ -10,6 +10,4 @@ function plugin.handle_command(cmd, msg)
   end
 end
 
-function plugin.tick() end
-
 return plugin
