@@ -20,11 +20,8 @@ end
 
 function commands.PRIVMSG(msg)
   local cmd = util.split(msg.params[2], " ")[1]
-  for _,plugin in pairs(plugins) do
-    if util.has(plugin.get_commands(), cmd) then
-      plugin.handle_command(cmd, msg)
-    end
-    plugin.tick()
+  if plugin.check(cmd) then
+    plugin.run(cmd, msg)
   end
 end
 

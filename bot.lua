@@ -7,6 +7,7 @@ dispatcher = require("dispatcher")
 factory = require("factory")
 handler = require("handler")
 parser = require("parser")
+plugin = require("plugin")
 queue = require("queue")
 util = require("util")
 
@@ -16,17 +17,7 @@ local socket = require("socket")
 inbound = queue:new()
 outbound = queue:new()
 client = socket.tcp()
-plugins = {}
 run = true
-
-function load_plugins()
-  plugins = {}
-  for file in lfs.dir("plugins/") do
-    if file ~= "." and file ~= ".." then
-      plugins[#plugins+1] = dofile("plugins/" .. file)
-    end
-  end
-end
 
 local function connect()
   client:settimeout(0)
@@ -50,7 +41,7 @@ local function loop()
   client:close()
 end
 
-load_plugins()
+plugin.load()
 connect()
 auth()
 loop()
