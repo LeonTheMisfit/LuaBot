@@ -24,7 +24,7 @@ end
 
 function log.chat_message(msg)
   local query = string.format([[
-    INSERT INTO chat_log(uuid, prefix, command, message, recipient)
+    INSERT INTO chat_log(uuid, prefix, command, recipient, message)
     VALUES ('%s', '%s', '%s', '%s', '%s')
   ]], msg.uuid, msg.prefix, msg.command, msg.params[1], msg.params[2])
   conn:execute(query)
