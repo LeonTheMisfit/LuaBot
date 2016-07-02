@@ -9,6 +9,7 @@ handler = require("handler")
 parser = require("parser")
 plugin = require("plugin")
 queue = require("queue")
+socket = require("socket")
 util = require("util")
 
 local lfs = require("lfs")
@@ -18,6 +19,13 @@ inbound = queue:new()
 outbound = queue:new()
 client = socket.tcp()
 run = true
+
+local function load_flags()
+  for _, flag in ipairs(arg) do
+    local split = util.split(flag, "=")
+    config[split[1]] = split[2]
+  end
+end
 
 local function connect()
   client:settimeout(0)
@@ -41,6 +49,7 @@ local function loop()
   client:close()
 end
 
+load_flags()
 plugin.load()
 connect()
 auth()
