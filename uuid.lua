@@ -6,6 +6,7 @@ local chars = {
 local uuid = {}
 
 function uuid.generate(len)
+  math.randomseed(os.time())
   len = len or config.idlen
   local id = ""
   for _ = 1, len do
