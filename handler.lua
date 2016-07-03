@@ -4,7 +4,6 @@ function handler.run()
   while true do
     local raw = inbound:pop()
     if raw and raw ~= "" then
-      print(raw)
       local msg = parser.parse_message(raw)
       log.raw_message(msg.uuid, os.time(), raw)
       if commands[msg.command] then
