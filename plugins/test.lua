@@ -10,4 +10,8 @@ function plugin.handle_command(cmd, msg)
   end
 end
 
+function plugin.is_admin()
+  return false
+end
+
 return plugin

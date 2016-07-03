@@ -14,4 +14,8 @@ function _plugin.handle_command(cmd, msg)
   end
 end
 
+function _plugin.is_admin()
+  return true
+end
+
 return _plugin
