@@ -3,10 +3,11 @@ local chars = {
   "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
 }
 
+math.randomseed(os.time())
+
 local uuid = {}
 
 function uuid.generate(len)
-  math.randomseed(os.time())
   len = len or config.idlen
   local id = ""
   for _ = 1, len do
