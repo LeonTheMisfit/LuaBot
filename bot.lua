@@ -2,7 +2,7 @@
 
 builder = require("builder")
 commands = require("commands")
-config = require("config")
+config_handler = require("config_handler")
 dispatcher = require("dispatcher")
 factory = require("factory")
 handler = require("handler")
@@ -20,15 +20,8 @@ local socket = require("socket")
 inbound = queue:new()
 outbound = queue:new()
 client = socket.tcp()
+config = {}
 run = true
-
-local function load_flags()
-  log.system(log.events.INFO, "Loading flags.")
-  for _, flag in ipairs(arg) do
-    local split = util.split(flag, "=")
-    config[split[1]] = split[2]
-  end
-end
 
 local function connect()
   log.system(log.events.INFO, "Connecting to host.")
@@ -58,8 +51,9 @@ local function loop()
 end
 
 local function init()
+  config_handler.load_flags()
+  config_handler.load_file()
   log.load_db()
-  load_flags()
   plugin_handler.load()
   log.system(log.events.INFO, "Bot initialized.")
 end
