@@ -66,4 +66,24 @@ function parser.parse_message(msg)
   }
 end
 
+function parser.parse_user(prefix)
+  local user = {
+    nick = "",
+    id = "",
+    hostmask = "",
+    username = ""
+  }
+
+  local nicksplit = util.split(prefix, "!")
+  local idsplit = util.split(nicksplit[2], "@")
+  local hostsplit = util.split(idsplit[2], "/")
+
+  user.nick = nicksplit[1]
+  user.id = idsplit[1]
+  user.hostmask = hostsplit[1]
+  user.username = hostsplit[2]
+
+  return user
+end
+
 return parser
