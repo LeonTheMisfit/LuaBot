@@ -5,19 +5,20 @@ local log = {}
 log.events = {
   INFO = "info",
   ERR = "error",
-  WARN = "warning"
+  WARN = "warning",
+  FLAG = "opflag",
+  CRERR = "coroutineerror",
 }
 
-local conn = {}
-local curs = {}
+log.conn = {}
 
 function log.load_db()
-  conn = sql:connect(config.db_file)
+  log.conn = sql:connect(config.db_file)
 end
 
 function log.close_db()
-  conn:commit()
-  conn:close()
+  log.conn:commit()
+  log.conn:close()
 end
 
 function log.raw_message(uuid, timestamp, msg)
@@ -25,7 +26,7 @@ function log.raw_message(uuid, timestamp, msg)
     INSERT INTO raw_messages(uuid, timestamp, message)
     VALUES ('%s', %i, '%s')
   ]], uuid, timestamp, msg)
-  conn:execute(query)
+  log.conn:execute(query)
 end
 
 function log.chat_message(msg)
@@ -33,15 +34,16 @@ function log.chat_message(msg)
     INSERT INTO chat_log(uuid, prefix, command, recipient, message)
     VALUES ('%s', '%s', '%s', '%s', '%s')
   ]], msg.uuid, msg.prefix, msg.command, msg.params[1], msg.params[2])
-  conn:execute(query)
+  log.conn:execute(query)
 end
 
 function log.system(event, message)
+  message = message:gsub("'", "''")
   local query = string.format([[
     INSERT INTO system_log(uuid, timestamp, event_type, message)
     VALUES ('%s', %i, '%s', '%s')
   ]], uuid.generate(), os.time(), event, message)
-  conn:execute(query)
+  log.conn:execute(query)
 end
 
 return log

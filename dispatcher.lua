@@ -36,7 +36,10 @@ function dispatcher.run()
   local threads = {}
   for _, thread in ipairs(dispatcher.__threads) do
     if coroutine.status(thread) ~= "dead" then
-      coroutine.resume(thread)
+      local success, error = coroutine.resume(thread)
+      if not success then
+        log.system(log.events.CRERR, error)
+      end
     end
     if coroutine.status(thread) ~= "dead" then
       threads[#threads+1] = thread
