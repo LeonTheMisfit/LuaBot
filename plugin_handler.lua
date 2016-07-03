@@ -1,8 +1,8 @@
 local function is_user_admin(user)
-  if user.hostmask == "snoonet" then
+  if user.host:find("snoonet/") then
     return true
-  elseif user.hostmask == "user" then
-    if util.has(config.admins, user.username) then
+  else
+    if util.has(config.admins, user.user) then
       return true
     end
   end
