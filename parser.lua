@@ -74,14 +74,24 @@ function parser.parse_user(prefix)
     username = ""
   }
 
-  local nicksplit = util.split(prefix, "!")
-  local idsplit = util.split(nicksplit[2], "@")
-  local hostsplit = util.split(idsplit[2], "/")
-
-  user.nick = nicksplit[1]
-  user.id = idsplit[1]
-  user.hostmask = hostsplit[1]
-  user.username = hostsplit[2]
+  local chars = util.explode(prefix)
+  if util.has(chars, "@") and util.has(chars, "/") then
+    local split = util.split(prefix, "@")
+    if util.has(chars, "!") then
+      local nicksplit = util.split(split[1], "!")
+      user.nick = nicksplit[1]
+      user.id = nicksplit[2]
+    else
+      user.nick = split[1]
+    end
+    if util.has(chars, "/") then
+      local hostparts = util.split(split[2], "/")
+      user.hostmask = hostparts[1]
+      user.username = hostparts[#hostparts]
+    else
+      user.hostmask = split[2]
+    end
+  end
 
   return user
 end

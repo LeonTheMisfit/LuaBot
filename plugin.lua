@@ -1,3 +1,14 @@
+local function is_user_admin(user)
+  if user.hostmask == "snoonet" then
+    return true
+  elseif user.hostmask == "user" then
+    if util.has(config.admins, user.username) then
+      return true
+    end
+  end
+  return false
+end
+
 local plugin = {}
 
 local plugins = {}
@@ -17,9 +28,12 @@ function plugin.load()
   end
 end
 
-function plugin.check(cmd)
+function plugin.check(cmd, msg)
   if plugin_lut[cmd] then
-    return true
+    local user = parser.parse_user(msg.prefix)
+    if not plugins[plugin_lut[cmd]].is_admin() or is_user_admin(user) then
+      return true
+    end
   end
   return false
 end
