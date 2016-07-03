@@ -24,8 +24,8 @@ end
 function commands.PRIVMSG(msg)
   log.chat_message(msg)
   local cmd = util.split(msg.params[2], " ")[1]
-  if plugin.check(cmd, msg) then
-    plugin.run(cmd, msg)
+  if plugin_handler.check(cmd, msg) then
+    plugin_handler.run(cmd, msg)
   end
 end
 

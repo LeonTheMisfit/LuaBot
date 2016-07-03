@@ -8,7 +8,7 @@ factory = require("factory")
 handler = require("handler")
 log = require("log")
 parser = require("parser")
-plugin = require("plugin")
+plugin_handler = require("plugin_handler")
 queue = require("queue")
 socket = require("socket")
 util = require("util")
@@ -60,7 +60,7 @@ end
 local function init()
   log.load_db()
   load_flags()
-  plugin.load()
+  plugin_handler.load()
   log.system(log.events.INFO, "Bot initialized.")
 end
 
