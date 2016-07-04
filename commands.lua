@@ -6,7 +6,7 @@ function commands.PING(msg)
 end
 
 local join = false
-commands["004"] = function(msg)
+commands["900"] = function(msg)
   if not join then
     for _, chan in ipairs(config.chans) do
       client:send(factory.join(chan))
