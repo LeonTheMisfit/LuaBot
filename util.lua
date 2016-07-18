@@ -36,4 +36,24 @@ function util.explode(str)
   return chars
 end
 
+function util.any(tbl, func)
+  for _, v in pairs(tbl) do
+    if func(v) then
+      return true
+    end
+  end
+  return false
+end
+
+function util.remove_char(str, char)
+  local new_string = ""
+  for i = 1, #str do
+    local c = str:sub(i, i)
+    if c ~= char then
+      new_string = new_string .. c
+    end
+  end
+  return new_string
+end
+
 return util
