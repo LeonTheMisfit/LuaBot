@@ -1,5 +1,13 @@
+local function is_channel_admin(user)
+  return util.any(config.chans, function(chan)
+    return user.host:find(util.remove_char(chan, "#"))
+  end)
+end
+
 local function is_user_admin(user)
   if user.host:find("snoonet/") then
+    return true
+  elseif is_channel_admin(user) then
     return true
   elseif user.host:find("user/") then
     if util.has(config.admins, user.nick) or util.has(config.admins, user.user) then
