@@ -2,6 +2,7 @@
 
 builder = require("builder")
 commands = require("commands")
+coroutine = require("comp_cr")
 config_handler = require("config_handler")
 dispatcher = require("dispatcher")
 factory = require("factory")
