@@ -1,6 +1,7 @@
 local dispatcher = {}
 
 dispatcher.__threads = {}
+dispatcher.__threadids = {}
 
 function dispatcher.receive()
   local data, status
@@ -26,14 +27,17 @@ end
 
 function dispatcher.add_thread(func, arg)
   local cnt = #dispatcher.__threads + 1
-  dispatcher.__threads[cnt] = coroutine.create(function()
-    func(arg)
+  local id = uuid.generate(4)
+  dispatcher.__threads[cnt] = coroutine.create(id, function()
+    func(arg, id)
   end)
-  return cnt
+  dispatcher.__threadids[id] = dispatcher.__threads
+  return cnt, id
 end
 
 function dispatcher.run()
   local threads = {}
+  local threadids = {}
   for _, thread in ipairs(dispatcher.__threads) do
     if coroutine.status(thread) ~= "dead" then
       local success, error = coroutine.resume(thread)
@@ -43,9 +47,20 @@ function dispatcher.run()
     end
     if coroutine.status(thread) ~= "dead" then
       threads[#threads+1] = thread
+      threadids[thread.id] = thread
     end
   end
   dispatcher.__threads = threads
+  dispatcher.__threadids = threadids
+end
+
+function dispatcher.stop(id)
+  local thread = dispatcher.__threadids[id]
+  if thread then
+    if coroutine.status(thread) ~= "dead" then
+      coroutine.resume(thread, "STOP")
+    end
+  end
 end
 
 return dispatcher

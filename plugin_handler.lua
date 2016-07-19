@@ -46,8 +46,8 @@ function plugin_handler.check(cmd, msg)
   return false
 end
 
-function plugin_handler.run(cmd, msg)
-  plugins[plugin_lut[cmd]].handle_command(cmd, msg)
+function plugin_handler.run(cmd, msg, id)
+  plugins[plugin_lut[cmd]].handle_command(cmd, msg, id)
 end
 
 return plugin_handler

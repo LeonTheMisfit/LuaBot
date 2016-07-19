@@ -21,16 +21,16 @@ function commands.ERROR(msg)
   log.system(log.events.ERR, "Server sent an error response.")
 end
 
-function commands.PRIVMSG(msg)
+function commands.PRIVMSG(msg, id)
   log.chat_message(msg)
   local cmd = util.split(msg.params[2], " ")[1]
   if plugin_handler.check(cmd, msg) then
-    plugin_handler.run(cmd, msg)
+    plugin_handler.run(cmd, msg, id)
   end
 end
 
-function commands.NOTICE(msg)
-  commands.PRIVMSG(msg)
+function commands.NOTICE(msg, id)
+  commands.PRIVMSG(msg, id)
 end
 
 return commands
