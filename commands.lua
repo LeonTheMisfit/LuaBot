@@ -33,4 +33,9 @@ function commands.NOTICE(msg, id)
   commands.PRIVMSG(msg, id)
 end
 
+function commands.INVITE(msg, id)
+  config.chans[#config.chans+1] = msg.params[2]
+  outbound:push(factory.join(msg.params[2]))
+end
+
 return commands
