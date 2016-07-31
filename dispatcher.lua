@@ -4,12 +4,27 @@ dispatcher.__threads = {}
 dispatcher.__threadids = {}
 dispatcher.thread_count = 0
 
+function dispatcher.__count_check(n)
+  return inbound:count() <= n and
+    outbound:count() <= n and
+    dispatcher.thread_count <= n
+end
+
 function dispatcher.receive()
+  if dispatcher.__count_check(0) then
+    client:settimeout(-1)
+  elseif dispatcher.__count_check(5) then
+    client:settimeout(1)
+  else
+    client:settimeout(0)
+  end
+
   local data, status
   repeat
     data, status = client:receive("*l")
     if data and data ~= "" then
       inbound:push(data)
+      client:settimeout(0)
     end
   until status == "timeout"
 end

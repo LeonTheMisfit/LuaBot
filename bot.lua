@@ -26,7 +26,6 @@ run = true
 
 local function connect()
   log.system(log.events.INFO, "Connecting to host.")
-  client:settimeout(0)
   client:connect(config.host, config.port)
 end
 
